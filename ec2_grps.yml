@@ -1,0 +1,11 @@
+- name: example using security group rule descriptions
+  ec2_group:
+    name: test_group
+    description: sg with rule descriptions
+    region: us-east-1
+    rules:
+      - proto: tcp
+        ports:
+        - 80
+        cidr_ip: 0.0.0.0/0
+        rule_desc: allow all on port 80
