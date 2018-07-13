@@ -1,0 +1,33 @@
+- hosts: localhost
+  connection: local
+  gather_facts: False
+
+  vars:
+    aws_region: us-east-2
+    instance_type: t2.micro
+    ami: ami-8c122be9
+    project_name: ctm_test
+
+  tasks:
+    - name: Create security group
+      ec2_group:
+        name: "{{ project_name }}_security_group"
+        description: "{{ project_name }} security group"
+        region: "{{ aws_region }}"
+        rules:
+          - proto: tcp
+            from_port: 22
+            to_port: 22
+            cidr_ip: 0.0.0.0/0
+          - proto: tcp
+            from_port: 80
+            to_port: 80
+            cidr_ip: 0.0.0.0/0
+          - proto: tcp
+            from_port: 443
+            to_port: 443
+            cidr_ip: 0.0.0.0/0
+        rules_egress:
+          - proto: all
+            cidr_ip: 0.0.0.0/0
+      register: basic_firewall

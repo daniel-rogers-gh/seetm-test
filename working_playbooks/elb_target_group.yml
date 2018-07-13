@@ -1,0 +1,13 @@
+- hosts: localhost
+  connection: local
+  gather_facts: False
+
+  tasks:
+    - name: Create target group 
+      elb_target_group:
+        name: new-test
+        protocol: http
+        port: 80
+        vpc_id: vpc-8ee6c4e6 
+        health_check_path: /index.html
+        state: present 

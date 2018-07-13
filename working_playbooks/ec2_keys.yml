@@ -1,0 +1,17 @@
+- hosts: localhost
+  connection: local
+  gather_facts: False
+
+  tasks:
+    - name: create a new ec2 key pair, returns generated private key
+      ec2_key:
+        name: my_keypair
+        region: us-east-2
+      register: ec2_key
+
+    - name: save private key
+      copy:
+        content: "{{ ec2_key.key.private_key }}" 
+        dest: "./aws-private.pem" 
+        mode: 0600
+      when: ec2_key.changed

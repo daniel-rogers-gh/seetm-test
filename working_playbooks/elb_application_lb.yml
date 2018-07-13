@@ -1,0 +1,22 @@
+- hosts: localhost
+  connection: local
+  gather_facts: False
+
+  tasks:
+    - name: Provision Application Load Balancer
+      elb_application_lb:
+        name: auto-elb
+        security_groups:
+          - sg-0e0df8317af596692
+        subnets:
+          - subnet-538add3b
+          - subnet-03788c4f
+          - subnet-8736bbfd 
+        listeners:
+          - Protocol: HTTP # Required. The protocol for connections from clients to the load balancer (HTTP or HTTPS) (case-sensitive).
+            Port: 80 # Required. The port on which the load balancer is listening.
+            # The security policy that defines which ciphers and protocols are supported. The default is the current predefined security policy.
+            DefaultActions:
+              - Type: forward # Required. Only 'forward' is accepted at this time
+                TargetGroupName: new-test # Required. The name of the target group
+        state: present

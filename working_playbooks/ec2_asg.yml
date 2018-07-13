@@ -1,0 +1,19 @@
+- hosts: localhost
+  connection: local
+  gather_facts: False
+
+  tasks:
+    - name: Provision Auto Scaling Group
+      ec2_asg:
+        name: auto_webservers
+        availability_zones: [ 'us-east-2a', 'us-east-2b', 'us-east-2c' ]
+        launch_config_name: 'auto_launch_config'
+        min_size: 3 
+        max_size: 3
+        desired_capacity: 3
+        vpc_zone_identifier: [ 'subnet-538add3b', 'subnet-03788c4f', 'subnet-8736bbfd' ]
+        target_group_arns: arn:aws:elasticloadbalancing:us-east-2:018962535793:targetgroup/new-test/1a65522e92bd177e
+        tags:
+          - environment: production
+            propagate_at_launch: no
+        state: present
