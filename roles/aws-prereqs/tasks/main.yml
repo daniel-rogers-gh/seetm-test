@@ -1,0 +1,183 @@
+# Create VPC 
+
+- name:               Create VPC
+  ec2_vpc_net:
+    name:             "{{ vpc_name }}"
+    cidr_block:       "{{ vpc_cidr_block }}"
+    region:           "{{ aws_region }}"
+    aws_access_key:   "{{ aws_access_key }}"
+    aws_secret_key:   "{{ aws_secret_key }}"
+    state:            "present"
+  register: my_vpc
+
+# Store VPC ID 
+
+- name:               Set VPC ID in variable
+  set_fact:
+    vpc_id:           "{{ my_vpc.vpc.id }}"
+
+# Create multiple subnets yo
+# Get number of available subnets 2, 3 etc and create accordingly
+
+- name:               Create Subnet
+  ec2_vpc_subnet:
+    state:            "present"
+    vpc_id:           "{{ vpc_id }}"
+    cidr:             "{{ public_subnet_1_cidr }}"
+    az:               "{{ aws_region }}a"
+    region:           "{{ aws_region }}"
+    aws_access_key:   "{{ aws_access_key }}"
+    aws_secret_key:   "{{ aws_secret_key }}"
+    resource_tags:
+      Name:           "Public Subnet"
+  register: my_public_subnet
+
+# Store subnets 
+
+- name:               Set Public Subnet ID in variable
+  set_fact:
+    public_subnet_id: "{{ my_public_subnet.subnet.id }}"
+
+# Create Internet Gateway
+
+- name:               Create Internet Gateway for VPC
+  ec2_vpc_igw:
+    vpc_id:           "{{ vpc_id }}"
+    region:           "{{ aws_region }}"
+    aws_access_key:   "{{ aws_access_key }}"
+    aws_secret_key:   "{{ aws_secret_key }}"
+    state:            "present"
+  register: my_vpc_igw
+
+# Store Internet Gateway ID
+
+- name:               Set Internet Gateway ID in variable
+  set_fact:
+    igw_id:           "{{ my_vpc_igw.gateway_id }}"
+
+# Set routing
+# Cater for multiple subnets etc?
+
+- name:               Set up public subnet route table
+  ec2_vpc_route_table:
+    vpc_id:           "{{ vpc_id }}"
+    region:           "{{ aws_region }}"
+    aws_access_key:   "{{ aws_access_key }}"
+    aws_secret_key:   "{{ aws_secret_key }}"
+    tags:
+      Name:           "Public"
+    subnets:
+      -               "{{ public_subnet_id }}"
+    routes:
+      - dest:         "0.0.0.0/0"
+        gateway_id:   "{{ igw_id }}"
+
+# Create 
+
+- name:               Create Main Security Group
+  ec2_group:
+    name:             "{{ vpc_secgrp_name }}"
+    description:      "{{ vpc_secgrp_name }}"
+    vpc_id:           "{{ vpc_id }}"
+    region:           "{{ aws_region }}"
+    aws_access_key:   "{{ aws_access_key }}"
+    aws_secret_key:   "{{ aws_secret_key }}"
+    rules:
+      - proto:        "tcp"
+        from_port:    "22"
+        to_port:      "22"
+        cidr_ip:      "0.0.0.0/0"
+
+# Create key pair
+- name: Create new Key Pair
+  ec2_key:
+    name:             "{{ my_keypair**** }}"
+    region:           "{{ aws_region }}"
+  register: ec2_key
+
+- name: Save private key
+  copy:
+    content:          "{{ ec2_key.key.private_key }}"
+    dest:             "{{ key_dest }}"
+    mode:             0600
+  when: ec2_key.changed
+
+# Create security groups
+
+- name: Create Application Load Balancer Security Group
+  ec2_group:
+    name:             "{{ alb_secgrp_name }}"
+    description:      "{{ alb_secgrp_name }}"
+    region:           "{{ aws_region }}"
+    rules:
+      - proto:        "tcp"
+        from_port:    "80"
+        to_port:      "80"
+        cidr_ip:      "0.0.0.0/0"
+      - proto:        "tcp"
+        from_port:    "443"
+        to_port:      "443"
+        cidr_ip:      "0.0.0.0/0"
+    rules_egress:
+      - proto:        "all"
+        cidr_ip:      "0.0.0.0/0"
+  register: alb_secgrp
+
+- name:               Set Application Load Balancer Security Group ID in variable
+  set_fact:
+    alb_secgrp_id: "{{ alb_secgrp.id }}"
+
+
+- name: Create webserver Security Group
+  ec2_group:
+    name:             "{{ websvr_secgrp_name }}"
+    description:      "{{ websvr_secgrp_name }}"
+    region:           "{{ aws_region }}"
+    rules:
+      - proto:        "tcp"
+        from_port:    "22"
+        to_port:      "22"
+        cidr_ip:      "0.0.0.0/0"
+      - proto:        "tcp"
+        from_port:    "80"
+        to_port:      "80"
+        cidr_ip:      "0.0.0.0/0"
+      - proto:        "tcp"
+        from_port:    "443"
+        to_port:      "443"
+        cidr_ip:      "0.0.0.0/0"
+    rules_egress:
+      - proto:        "all"
+        cidr_ip:      "0.0.0.0/0"
+  register: websvr_secgrp
+
+- name:               Set webserver Security Group ID in variable
+  set_fact:
+    websvr_secgrp_id: "{{ websvr_secgrp.id }}"
+
+# Create Launch Configuration
+
+- name: Create Launch Configuration
+  ec2_lc:
+    name:             "{{ lc_name }}" 
+    image_id:         "{{ ami }}" 
+    key_name:         "{{ key_pair_name }}"
+    security_groups:  "{{ ['websvr_secgrp_id'] }}"
+    instance_type:    "{{ instance_type }}"
+    volumes:
+    - device_name:    "{{ lc_dev_name }}"
+      volume_size:    "{{ lc_vol_size }}"
+      volume_type:    "{{ lc_vol_type }}"
+      delete_on_termination: "true"
+
+# Create Target Group
+
+- name: Create Target Group
+  elb_target_group:
+    name:             "{{ elb_tg_name }}"
+    protocol:         "http"
+    port:             "80"
+    vpc_id:           "{{ vpc_id }}"
+    health_check_path: "{{ elb_tg_check_path }}" 
+    state:            "present"
+

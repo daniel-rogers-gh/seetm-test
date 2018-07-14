@@ -1,0 +1,36 @@
+# Create Auto Scaling Group and provision instances
+
+- name: Create Auto Scaling Group
+  ec2_asg:
+    name:                    "{{ asg_name }}"
+    availability_zones:  **  [ 'us-east-2a', 'us-east-2b', 'us-east-2c' ]
+    launch_config_name:      "{{ lc_name }}"
+    min_size:                "{{ asg_min }}"
+    max_size:                "{{ asg_max }}"
+    desired_capacity:        "{{ asg_desired }}"
+    vpc_zone_identifier:  **   [ 'subnet-538add3b', 'subnet-03788c4f', 'subnet-8736bbfd' ]
+    target_group_arns:       "{{ websvr_secgrp_arn }}" 
+    tags:
+      - environment:         production
+        propagate_at_launch: no
+    state:                   "present"
+
+# Create Application Load Balancer
+
+- name: Create Application Load Balancer
+  elb_application_lb:
+    name:                    "{{ elb_name }}"
+    security_groups:
+      -                      "{{ elb_secgrp_name }}"
+    subnets:
+      -                      subnet-538add3b
+      -                      subnet-03788c4f
+      -                      subnet-8736bbfd
+    listeners:
+      - Protocol:            "HTTP"
+        Port:                "80"
+        DefaultActions:
+          - Type:            "forward"
+            TargetGroupName: "{{ websvr_secgrp_name }}"
+    state:                   "present"
+
