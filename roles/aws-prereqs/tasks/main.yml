@@ -31,6 +31,7 @@
     resource_tags:
       Name:           "Public Subnet"
   register: my_public_subnet
+ #with_items: "{{ some list }}"
 
 # Store subnets 
 
@@ -87,6 +88,8 @@
         from_port:    "22"
         to_port:      "22"
         cidr_ip:      "0.0.0.0/0"
+# isnt this gonna need http too?
+
 
 # Create key pair
 - name: Create new Key Pair
@@ -125,7 +128,7 @@
 
 - name:               Set Application Load Balancer Security Group ID in variable
   set_fact:
-    alb_secgrp_id: "{{ alb_secgrp.id }}"
+    alb_secgrp_id: "{{ alb_secgrp.group_id }}"
 
 
 - name: Create webserver Security Group
@@ -153,7 +156,7 @@
 
 - name:               Set webserver Security Group ID in variable
   set_fact:
-    websvr_secgrp_id: "{{ websvr_secgrp.id }}"
+    websvr_secgrp_id: "{{ websvr_secgrp.group_id }}"
 
 # Create Launch Configuration
 
@@ -162,7 +165,7 @@
     name:             "{{ lc_name }}" 
     image_id:         "{{ ami }}" 
     key_name:         "{{ key_pair_name }}"
-    security_groups:  "{{ ['websvr_secgrp_id'] }}"
+    security_groups:  "{{ websvr_secgrp_id }}"
     instance_type:    "{{ instance_type }}"
     volumes:
     - device_name:    "{{ lc_dev_name }}"
@@ -180,4 +183,9 @@
     vpc_id:           "{{ vpc_id }}"
     health_check_path: "{{ elb_tg_check_path }}" 
     state:            "present"
+  register:           elb_tg
+
+- name:               Set ELB Target Group ARN in variable
+  set_fact:
+    elb_tg_arn: "{{ elb_tg.target_group_arn }}"
 
