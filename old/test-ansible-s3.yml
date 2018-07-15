@@ -1,8 +1,0 @@
-- hosts: localhost
-  connection: local
-  gather_facts: False
-
-  tasks:
-    - name: Provision a S3 bucket
-      s3_bucket:
-        name: testing-the-thing-mys3bucket-20180712

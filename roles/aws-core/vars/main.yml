@@ -8,7 +8,6 @@ asg_desired:            "2"
 
 # Application Load Balancer 
 elb_name:               "app-lb1"
-
 #elb_secgrp_name:       Set as fact in roles/aws-prereqs/tasks/main.yml 
 #websvr_secgrp_name     Set as fact in roles/aws-prereqs/tasks/main.yml 
 
