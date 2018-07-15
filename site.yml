@@ -1,9 +1,13 @@
-# This is the master file that starts all the things
-#- import_playbook: webservers.yml
+# This is the master playbook
 
 - hosts: localhost
   roles:
     - aws-prereqs
     - aws-core
-#    - webserver
+
+- hosts: webservers
+  gather_facts: no
+
+  roles:
+    - webserver
 

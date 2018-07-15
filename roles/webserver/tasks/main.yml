@@ -1,26 +1,13 @@
 ########## 
-- name: 
-  command: /usr/bin/make_database.sh arg1 arg2 creates=/path/to/database
+- name: Install nginx
+  shell: "amazon-linux-extras install nginx1.12"
+  become: yes
 
-- name: Enable amazon-linux-extras packages
-    shell: "sudo amazon-linux-extras install nginx1.12"
-    become: yes
+- name: Enable and start nginx
+  shell: "systemctl enable nginx && sudo systemctl start nginx"
+  become: yes
 
-#sudo amazon-linux-extras install nginx1.12 -y
-#sudo systemctl enable nginx
-#sudo systemctl start nginx
-#
-#AWS_INSTANCEID="Instance ID: $(curl -s http://169.254.169.254/latest/meta-data/instance-id)"
-#sudo sed -i.bak "s|Website Administrator|${AWS_INSTANCEID}|g" /usr/share/nginx/html/index.html
+- name: Alter index.html
+  shell: 'AWS_INSTANCEID=$(curl -s http://169.254.169.254/latest/meta-data/instance-id); sed -i.bak "s|Website Administrator|${AWS_INSTANCEID}|g" /usr/share/nginx/html/index.html'
+  become: yes
 
-#  ec2_key:
-#    name: my_keypair
-#    region: us-east-2
-#  register: ec2_key
-#
-#- name: save private key
-#  copy:
-#    content: "{{ ec2_key.key.private_key }}" 
-#    dest: "./aws-private.pem" 
-#    mode: 0600
-#  when: ec2_key.changed
