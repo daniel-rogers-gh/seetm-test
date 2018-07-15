@@ -2,6 +2,10 @@
 - name: 
   command: /usr/bin/make_database.sh arg1 arg2 creates=/path/to/database
 
+- name: Enable amazon-linux-extras packages
+    shell: "sudo amazon-linux-extras install nginx1.12"
+    become: yes
+
 #sudo amazon-linux-extras install nginx1.12 -y
 #sudo systemctl enable nginx
 #sudo systemctl start nginx

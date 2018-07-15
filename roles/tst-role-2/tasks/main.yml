@@ -6,11 +6,27 @@
 #    filters:
 #      zone-name: "us-west-2" 
 #  register: region_info
+- name: Get instance facts
+  ec2_instance_facts:
+    aws_access_key:     "{{ aws_access_key }}"
+    aws_secret_key:     "{{ aws_secret_key }}"
+    region:             "{{ aws_region }}"
+    filters:
+      "tag:aws:autoscaling:groupName": asg_1
+  register: instance_info
 
-- name: Echo a list
-  debug:
-    msg: "{{ item }}"
-  with_items: "{{ some_list }}"
+#- debug: msg={{ instance_info }}
+
+- name: group hosts
+  add_host: hostname={{ item }} groups=launched
+  with_items: "{{ instance_info.instances|map(attribute='public_dns_name')|list }}"
+
+
+
+#- name: Echo a list
+#  debug:
+#    msg: "{{ item }}"
+#  with_items: "{{ some_list }}"
 #  loop: "{{ some_list }}"
 #- debug: msg={{ region_info }}
 #- debug: msg={{ region_info|count }}

@@ -13,8 +13,8 @@
     vpc_zone_identifier:     [ "{{ subnet_a_id}}","{{ subnet_b_id }}" ]
     target_group_arns:       "{{ elb_tg_arn }}" 
     tags:
-      - environment:         production
-        propagate_at_launch: no
+      - type:                "webserver"
+        propagate_at_launch: "yes" 
     wait_for_instances:      "yes"
     state:                   "present"
 

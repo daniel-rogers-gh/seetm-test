@@ -1,20 +1,26 @@
-- name: Get region things
-  aws_az_facts:
-    aws_access_key:     "{{ aws_access_key }}"
-    aws_secret_key:     "{{ aws_secret_key }}"
-    region:             "us-east-1" #"{{ aws_region }}" 
+- name: populate service facts
+  service_facts:
+
+- debug:
+    var: ansible_facts.services
+
+#- name: Get region things
+#  aws_az_facts:
+#    aws_access_key:     "{{ aws_access_key }}"
+#    aws_secret_key:     "{{ aws_secret_key }}"
+#    region:             "us-east-1" #"{{ aws_region }}" 
 #    filters:
 #      zone-name: "us-west-2" 
-  register: region_info
+#  register: region_info
 
 #- name: Echo a list
 #  debug:
 #    msg: "An item: {{ item }}"
 #  with_items: "{{ some_list }}"
 
-- name: Set fact and see if role-2 can read it
-  set_fact:
-    role_1_var:  "{{ region_info }}"
+#- name: Set fact and see if role-2 can read it
+#  set_fact:
+#    role_1_var:  "{{ region_info }}"
 
 #  loop: "{{ some_list }}"
 #- debug: msg={{ region_info }}
