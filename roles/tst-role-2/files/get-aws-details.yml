@@ -1,0 +1,18 @@
+- hosts: localhost
+  connection: local
+  #gather_facts: False
+
+  tasks:
+    - name: Get VPC details
+      ec2_vpc_net_facts:
+        filters:
+          "tag:Name": default
+      register: vpc_test
+
+    - name: Get VPC subnet facts
+      ec2_vpc_subnet_facts:
+      register: vpc_subnets
+
+
+    - debug: msg={{ vpc_test }}
+    - debug: msg={{ vpc_subnets }}

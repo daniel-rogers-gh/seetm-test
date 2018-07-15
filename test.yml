@@ -1,0 +1,5 @@
+- hosts: localhost
+  roles:
+    - tst-role-1
+    - tst-role-2
+

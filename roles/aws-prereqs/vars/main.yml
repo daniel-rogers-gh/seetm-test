@@ -1,86 +1,30 @@
-############################
-# Used in parts 1, 2 and 3 #
-############################
-
 # VPC Information
-vpc_name:       "my-test-vpc"
-vpc_cidr_block: "10.0.0.0/16"
+vpc_name:               "my-test-vpc"
+vpc_cidr_block:         "10.0.0.0/16"
 
 # Subnets
-public_subnet_1_cidr:  "10.0.0.0/24"
+subnet_cidr_a:   "10.0.1.0/24"
+subnet_cidr_b:   "10.0.2.0/24"
 
-############################
-# Used in parts 2 and 3    #
-############################
+# Key Pairs
+key_pair_name:          "key_pair1"
+key_dest:               "./aws-private.pem"
 
-# Subnets
-private_subnet_1_cidr: "10.0.1.0/24"
+# Security Groups
+#elb_secgrp_name:       "" - specified in group_vars/all/vars
+vpc_secgrp_name:        "vpc_security_group"
+websvr_secgrp_name:     "webserver_security_group"
 
-############################
-# Used in part 3 only      #
-############################
+# Launch Configuration
+#lc_name:                "" - specified in group_vars/all/vars
+ami:                    "ami-8c122be9"
+#websvr_secgrp_name:     "webserver_security_group" - used for this module but declared above
+instance_type:          "t2.micro"
+lc_dev_name:            "/dev/xvda"
+lc_vol_size:            "100"
+lc_vol_type:            "gp2"
 
-# Subnets
-public_subnet_2_cidr:  "10.0.10.0/24"
-private_subnet_2_cidr: "10.0.11.0/24"
-
-key_pair_name: key_pair1
-key_dest: "./aws-private.pem"
-
-# ec2_group x 2
-
-lb_secgrp_name:       load_balancer_security_group
-web_secgrp_name:      webserver_security_group
-
-# ec2_lc
-
-# sec group might need to be specified by Group ID
-# like ['sg-077235be171560627']
-
-global_lc_name: launch_config1
-ami: ami-8c122be9
-key_pair_name: key_pair1
-web_secgrp_name: webserver_security_group
-instance: t2.micro
-dev_name: /dev/xvda
-vol_size: 100
-vol_type: gp2
-del_on_term: true
-
-#elb_target_group
-
-global_tg_name: target-group1
-tg_proto: http
-tg_port: 80
-global_vpc_id: ???
-tg_health_check: "/index.html"
-global_state_true: present
-
-# ec2_asg
-
-asg_name: asg_1
-global_avail_zones: [ 'us-east-2a', 'us-east-2b', 'us-east-2c' ]
-global_lc_name: launch_config1
-asg_min: 3
-asg_max: 3
-asg_desired: 3
-**asg_zone_ident: [ 'subnet-538add3b', 'subnet-03788c4f', 'subnet-8736bbfd' ]
-global_tg_arns: LIKE arn:aws:elasticloadbalancing:us-east-2:018962535793:targetgroup/new-test/1a65522e92bd177e
-global_state_true: present
-
-# elb_application_lb
-
-lb_name: app-lb1
-global_lb_secgrp_name: sec groups LIKE sg-0e0df8317af596692 does it use names?
-
-# Can we get these as a group and split if required?
-global_subnetx: LIKE subnet-538add3b
-global_subnety: LIKE subnet-03788c4f
-global_subnetz: LIKE subnet-8736bbfd
-
-lb_proto: HTTP
-lb_port: 80
-lb_def_type: forward
-global_tg_name: target-group1
-global_state_true: present
+# ALB Target Group (to be applied to webservers)
+elb_tg_name:            "tgt-grp-webservers"
+elb_tg_check_path:      "/index.html"
 

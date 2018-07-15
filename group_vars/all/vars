@@ -1,5 +1,7 @@
 # Globally available veriables
 
-aws_access_key: "{{ vault_aws_access_key }}" 
-aws_secret_key: "{{ vault_aws_secret_key }}"
-aws_region: us-east-2
+aws_access_key:         "{{ vault_aws_access_key }}" 
+aws_secret_key:         "{{ vault_aws_secret_key }}"
+aws_region:             "us-east-2"
+lc_name:                "lc_webserver"
+elb_secgrp_name:        "load_balancer_security_group"

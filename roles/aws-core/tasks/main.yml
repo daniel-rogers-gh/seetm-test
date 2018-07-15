@@ -1,36 +1,39 @@
-# Create Auto Scaling Group and provision instances
-
+##########
 - name: Create Auto Scaling Group
   ec2_asg:
     name:                    "{{ asg_name }}"
-    availability_zones:  **  [ 'us-east-2a', 'us-east-2b', 'us-east-2c' ]
+    region:                  "{{ aws_region }}"
+    aws_access_key:          "{{ aws_access_key }}"
+    aws_secret_key:          "{{ aws_secret_key }}"
+    availability_zones:      [ "{{ aws_region }}a","{{ aws_region }}b" ]
     launch_config_name:      "{{ lc_name }}"
     min_size:                "{{ asg_min }}"
     max_size:                "{{ asg_max }}"
     desired_capacity:        "{{ asg_desired }}"
-    vpc_zone_identifier:  **   [ 'subnet-538add3b', 'subnet-03788c4f', 'subnet-8736bbfd' ]
-    target_group_arns:       "{{ websvr_secgrp_arn }}" 
+    vpc_zone_identifier:     [ "{{ subnet_a_id}}","{{ subnet_b_id }}" ]
+    target_group_arns:       "{{ elb_tg_arn }}" 
     tags:
       - environment:         production
         propagate_at_launch: no
     state:                   "present"
 
-# Create Application Load Balancer
-
+##########
 - name: Create Application Load Balancer
   elb_application_lb:
     name:                    "{{ elb_name }}"
+    region:                  "{{ aws_region }}"
+    aws_access_key:          "{{ aws_access_key }}"
+    aws_secret_key:          "{{ aws_secret_key }}"
     security_groups:
       -                      "{{ elb_secgrp_name }}"
     subnets:
-      -                      subnet-538add3b
-      -                      subnet-03788c4f
-      -                      subnet-8736bbfd
+      -                      "{{ subnet_a_id}}"
+      -                      "{{ subnet_b_id}}"
     listeners:
       - Protocol:            "HTTP"
         Port:                "80"
         DefaultActions:
           - Type:            "forward"
-            TargetGroupName: "{{ websvr_secgrp_name }}"
+            TargetGroupName: "{{ elb_tg_name }}"
     state:                   "present"
 
