@@ -1,105 +1,22 @@
-# Master webserver play book - does all the things
+########## 
+- name: 
+  command: /usr/bin/make_database.sh arg1 arg2 creates=/path/to/database
 
-# Create key pair
-  tasks:
-    - name: create a new ec2 key pair, returns generated private key
-      ec2_key:
-        name: my_keypair
-        region: us-east-2
-      register: ec2_key
+#sudo amazon-linux-extras install nginx1.12 -y
+#sudo systemctl enable nginx
+#sudo systemctl start nginx
+#
+#AWS_INSTANCEID="Instance ID: $(curl -s http://169.254.169.254/latest/meta-data/instance-id)"
+#sudo sed -i.bak "s|Website Administrator|${AWS_INSTANCEID}|g" /usr/share/nginx/html/index.html
 
-    - name: save private key
-      copy:
-        content: "{{ ec2_key.key.private_key }}" 
-        dest: "./aws-private.pem" 
-        mode: 0600
-      when: ec2_key.changed
-
-# Create Security Groups
-  tasks:
-    - name: Create security group
-      ec2_group:
-        name: "{{ project_name }}_security_group"
-        description: "{{ project_name }} security group"
-        region: "{{ aws_region }}"
-        rules:
-          - proto: tcp
-            from_port: 22
-            to_port: 22
-            cidr_ip: 0.0.0.0/0
-          - proto: tcp
-            from_port: 80
-            to_port: 80
-            cidr_ip: 0.0.0.0/0
-          - proto: tcp
-            from_port: 443
-            to_port: 443
-            cidr_ip: 0.0.0.0/0
-        rules_egress:
-          - proto: all
-            cidr_ip: 0.0.0.0/0
-      register: basic_firewall
-
-# Create Launch Configuration
-  tasks:
-    - name: Create launch configuration
-      ec2_lc:
-        name: auto_launch_config
-        image_id: ami-8c122be9
-        key_name: my_keypair
-        security_groups: ['sg-077235be171560627']
-        instance_type: t2.micro
-        volumes:
-        - device_name: /dev/xvda
-          volume_size: 100
-          volume_type: gp2
-          delete_on_termination: true
-
-# Create Target Groups
-  tasks:
-    - name: Create target group 
-      elb_target_group:
-        name: new-test
-        protocol: http
-        port: 80
-        vpc_id: vpc-8ee6c4e6 
-        health_check_path: /index.html
-        state: present 
-
-# Create Auto Scaling Group (instances are provisioned)
-  tasks:
-    - name: Provision Auto Scaling Group
-      ec2_asg:
-        name: auto_webservers
-        availability_zones: [ 'us-east-2a', 'us-east-2b', 'us-east-2c' ]
-        launch_config_name: 'auto_launch_config'
-        min_size: 3 
-        max_size: 3
-        desired_capacity: 3
-        vpc_zone_identifier: [ 'subnet-538add3b', 'subnet-03788c4f', 'subnet-8736bbfd' ]
-        target_group_arns: arn:aws:elasticloadbalancing:us-east-2:018962535793:targetgroup/new-test/1a65522e92bd177e
-        tags:
-          - environment: production
-            propagate_at_launch: no
-        state: present
-
-# Create Application Load Balancer
-  tasks:
-    - name: Provision Application Load Balancer
-      elb_application_lb:
-        name: auto-elb
-        security_groups:
-          - sg-0e0df8317af596692
-        subnets:
-          - subnet-538add3b
-          - subnet-03788c4f
-          - subnet-8736bbfd 
-        listeners:
-          - Protocol: HTTP 
-            Port: 80 
-            DefaultActions:
-              - Type: forward
-                TargetGroupName: new-test
-        state: present
-
-# Do host config here?
+#  ec2_key:
+#    name: my_keypair
+#    region: us-east-2
+#  register: ec2_key
+#
+#- name: save private key
+#  copy:
+#    content: "{{ ec2_key.key.private_key }}" 
+#    dest: "./aws-private.pem" 
+#    mode: 0600
+#  when: ec2_key.changed

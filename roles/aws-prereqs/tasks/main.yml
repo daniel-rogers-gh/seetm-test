@@ -13,9 +13,6 @@
   set_fact:
     vpc_id:           "{{ my_vpc.vpc.id }}"
 
-# Create multiple subnets yo
-# Get number of available subnets 2, 3 etc and create accordingly
-
 ##########
 - name:                 Create Subnet a
   ec2_vpc_subnet:
@@ -28,6 +25,7 @@
     aws_secret_key:     "{{ aws_secret_key }}"
     resource_tags:
       Name:             "Public Subnet a"
+    map_public_ip_on_launch: true
   register: subnet_a
 
 - name:                 Set Subnet ID in variable
@@ -35,7 +33,7 @@
     subnet_a_id:        "{{ subnet_a.subnet.id }}"
 
 ##########
-- name:                 Create Subnet a
+- name:                 Create Subnet b
   ec2_vpc_subnet:
     state:              "present"
     vpc_id:             "{{ vpc_id }}"
@@ -46,6 +44,7 @@
     aws_secret_key:     "{{ aws_secret_key }}"
     resource_tags:
       Name:             "Public Subnet b"
+    map_public_ip_on_launch: true
   register: subnet_b
 
 - name:                 Set Subnet ID in variable

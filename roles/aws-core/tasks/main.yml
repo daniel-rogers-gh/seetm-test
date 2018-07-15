@@ -15,6 +15,7 @@
     tags:
       - environment:         production
         propagate_at_launch: no
+    wait_for_instances:      "yes"
     state:                   "present"
 
 ##########
@@ -36,4 +37,4 @@
           - Type:            "forward"
             TargetGroupName: "{{ elb_tg_name }}"
     state:                   "present"
-
+    wait:                    "yes"
