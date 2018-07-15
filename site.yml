@@ -1,6 +1,7 @@
 # This is the master playbook
 
 - hosts: localhost
+
   roles:
     - aws-prereqs
     - aws-core
