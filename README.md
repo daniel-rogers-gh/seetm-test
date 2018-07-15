@@ -78,6 +78,7 @@ To date this has only been executed on Ubuntu Linux. It should work on OSX but I
 - Give thought to smoother host configuration/index.html alteration
  - Slightly limited by no `amazon-linux-extras` ansible module
  - Further research needed
+- Role mapping to remove requirement for root keys
 
 ## Current limitations
 
@@ -86,7 +87,7 @@ To date this has only been executed on Ubuntu Linux. It should work on OSX but I
   - Note AWS region is set with variables so it is ready to go once the ami id detection is working
 - Idempotency issues - rerunning playbook gives errors
   - I believe this is related to ansible caching facts, `--flush-cache` option does not seem to resolve it. Further research required
-- Dynamic inventory for ASG instances is not persistent
+- Dynamic inventory for ASG instances (webservers) is not persistent
   - It is currently generated in a previous role which allows them to be targeted
   - Marked as a high priority improvement
 - Limited testing across varied environments - issues will undoubtedly be present somewhere
@@ -97,33 +98,33 @@ To date this has only been executed on Ubuntu Linux. It should work on OSX but I
 - [ ] Finish launcher `make_rocket_go.sh`
 - [ ] Test launcher in newly registered AWS trial account
 - [ ] Output load balancer public DNS upon script completion
-- [ ] Spell check README.md
-- [ ] Complete README.md
+- [x] Spell check README.md
+- [x] Complete 1st draft README.md
 
 ## References
 
 A subset of the many reference pieces that were used for this project:
 
 Ansible documentation / best practices
-https://docs.ansible.com/ansible/latest/modules/list_of_all_modules.html
-https://docs.ansible.com/ansible/latest/user_guide/playbooks_best_practices.html
+- https://docs.ansible.com/ansible/latest/modules/list_of_all_modules.html
+- https://docs.ansible.com/ansible/latest/user_guide/playbooks_best_practices.html
 
 Ansible + VPC blog
-https://jeremievallee.com/2016/07/27/aws-vpc-ansible.html
+- https://jeremievallee.com/2016/07/27/aws-vpc-ansible.html
 
 Ansible Vault
-https://docs.ansible.com/ansible/2.5/user_guide/vault.html
+- https://docs.ansible.com/ansible/2.5/user_guide/vault.html
 
 Git README markdown
-https://help.github.com/articles/basic-writing-and-formatting-syntax
-https://github.com/adam-p/markdown-here/wiki/Markdown-Cheatsheet
+- https://help.github.com/articles/basic-writing-and-formatting-syntax
+- https://github.com/adam-p/markdown-here/wiki/Markdown-Cheatsheet
 
 SSH Key Files
-https://stackoverflow.com/questions/42123317/how-to-use-a-public-keypair-pem-file-for-ansible-playbooks
+- https://stackoverflow.com/questions/42123317/how-to-use-a-public-keypair-pem-file-for-ansible-playbooks
 
 AWS Regions & Availability Zones
-https://gist.github.com/neilstuartcraig/0ccefcf0887f29b7f240
+- https://gist.github.com/neilstuartcraig/0ccefcf0887f29b7f240
 
 Sample Ansible repository layout
-https://github.com/enginyoyen/ansible-best-practises
+- https://github.com/enginyoyen/ansible-best-practises
 
