@@ -3,7 +3,6 @@
 Thanks for stopping by! If you're interested in what this project does, please keep on reading. Feel free to email me with any queries or suggestions I am always striving to learn and share.
 
 ## What does seetm-test do?
-======
 
 This project will create a pair of load balanced webservers with supporting AWS infrastructure.
 
@@ -22,13 +21,11 @@ This project will create a pair of load balanced webservers with supporting AWS 
 - Instances run Amazon Linux 2 (ami-8c122be9)
 
 ## General pre-requisites
-======
 
 - AWS account (trial account recommended)
 - AWS root account access and secret keys (generate via IAM)
 
 ## Package pre-requisites (in no particular order)
-======
 
 **Package        : version used in development**
 - python2.7      : 2.7.12
@@ -41,7 +38,6 @@ This project will create a pair of load balanced webservers with supporting AWS 
 - git            : 2.7.4
 
 ## Usage
-======
 
 ### Warning
 
@@ -71,9 +67,7 @@ Approximate running time is xx minutes.
 
 To date this has only been executed on Ubuntu Linux. It should work on OSX but I am unable to verify this.
 
-
 ## Future improvements
-======
 
 - Dynamically pick correct ami id for any region
  - Add `Desired OS` and `instance size` to launcher, query for appropriate ami id, update vars
@@ -86,7 +80,6 @@ To date this has only been executed on Ubuntu Linux. It should work on OSX but I
  - Further research needed
 
 ## Current limitations
-======
 
 - Limited to region **us-east-2**
   - The ami id is different in each region for Amazon Linux 2 t2.micro instance and I have not implemented a dynamic picker yet
@@ -108,30 +101,29 @@ To date this has only been executed on Ubuntu Linux. It should work on OSX but I
 - [ ] Complete README.md
 
 ## References
-======
 
 A subset of the many reference pieces that were used for this project:
 
 Ansible documentation / best practices
-[](https://docs.ansible.com/ansible/latest/modules/list_of_all_modules.html)
-[](https://docs.ansible.com/ansible/latest/user_guide/playbooks_best_practices.html)
+https://docs.ansible.com/ansible/latest/modules/list_of_all_modules.html
+https://docs.ansible.com/ansible/latest/user_guide/playbooks_best_practices.html
 
 Ansible + VPC blog
-[](https://jeremievallee.com/2016/07/27/aws-vpc-ansible.html)
+https://jeremievallee.com/2016/07/27/aws-vpc-ansible.html
 
 Ansible Vault
-[](https://docs.ansible.com/ansible/2.5/user_guide/vault.html)
+https://docs.ansible.com/ansible/2.5/user_guide/vault.html
 
 Git README markdown
-[](https://help.github.com/articles/basic-writing-and-formatting-syntax)
-[](https://github.com/adam-p/markdown-here/wiki/Markdown-Cheatsheet)
+https://help.github.com/articles/basic-writing-and-formatting-syntax
+https://github.com/adam-p/markdown-here/wiki/Markdown-Cheatsheet
 
 SSH Key Files
-[](https://stackoverflow.com/questions/42123317/how-to-use-a-public-keypair-pem-file-for-ansible-playbooks)
+https://stackoverflow.com/questions/42123317/how-to-use-a-public-keypair-pem-file-for-ansible-playbooks
 
 AWS Regions & Availability Zones
-[](https://gist.github.com/neilstuartcraig/0ccefcf0887f29b7f240)
+https://gist.github.com/neilstuartcraig/0ccefcf0887f29b7f240
 
 Sample Ansible repository layout
-[](https://github.com/enginyoyen/ansible-best-practises)
+https://github.com/enginyoyen/ansible-best-practises
 
