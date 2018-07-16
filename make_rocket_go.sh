@@ -4,8 +4,8 @@ printf "
 ####################################################################################
 #                         Thanks for making the rocket go!                         #
 #                Please don't run this in a production environment                 #
-####################################################################################
-"
+####################################################################################\n\n"
+
 printf "Please provide the following details when prompted:
 
     1) AWS Access Key (root/full access account)
