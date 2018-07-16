@@ -26,7 +26,8 @@ fi
 echo "vault_aws_secret_key: ${AWS_SECRET}" >> "${AWS_FILE}"
 
 if [ -z "$VAULT_PASS" ]; then
-    read -sp $'\nPlease enter a strong passphrase for Vault encryption: ' VAULT_PASS
+    read -sp $'\nPlease enter a strong passphrase/word for Vault encryption\n
+Use this passphrase/word when prompted for vault password: ' VAULT_PASS
 fi
 
 VAULT_FILE=vault_key
