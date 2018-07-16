@@ -1,5 +1,5 @@
 ##########
-- name: Create Auto Scaling Group
+- name:                      Create Auto Scaling Group
   ec2_asg:
     name:                    "{{ asg_name }}"
     region:                  "{{ aws_region }}"
@@ -19,7 +19,7 @@
     state:                   "present"
 
 ##########
-- name: Create Application Load Balancer
+- name:                      Create Application Load Balancer
   elb_application_lb:
     name:                    "{{ elb_name }}"
     region:                  "{{ aws_region }}"
@@ -38,18 +38,22 @@
             TargetGroupName: "{{ elb_tg_name }}"
     state:                   "present"
     wait:                    "yes"
+  register: alb
+
+- name:                      Set Load Balancer public DNS in variable
+  set_fact:                  "{{ alb.dns_name }}"
 
 ##########
-- name: Get ASG instance facts
+- name:                      Get ASG instance facts
   ec2_instance_facts:
-    aws_access_key:     "{{ aws_access_key }}"
-    aws_secret_key:     "{{ aws_secret_key }}"
-    region:             "{{ aws_region }}"
+    aws_access_key:          "{{ aws_access_key }}"
+    aws_secret_key:          "{{ aws_secret_key }}"
+    region:                  "{{ aws_region }}"
     filters:
-      "tag:type": webserver
+      "tag:type":            webserver
   register: instance_info
 
-- name: Add hosts to inventory
-  add_host: hostname={{ item }} groups=webservers
-  with_items: "{{ instance_info.instances|map(attribute='public_dns_name')|list }}"
+- name:                      Add hosts to inventory
+  add_host:                  hostname={{ item }} groups=webservers
+  with_items:                "{{ instance_info.instances|map(attribute='public_dns_name')|list }}"
 
