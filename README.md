@@ -52,9 +52,9 @@ Do not run this in a production environment! I am not responsible for any damage
 Once all pre-requisites have been fulfilled and the warning above has been read, perform the following:
 
 ```
-git clone https://github.com/daniel-rogers-gh/seetm-test.git` 
-cd ./seetm-test`
-./make_rocket_go.sh`
+git clone https://github.com/daniel-rogers-gh/seetm-test.git
+cd ./seetm-test
+./make_rocket_go.sh
 ```
 
 or for the one liner concatenate the commands like so:
