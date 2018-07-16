@@ -8,6 +8,6 @@
   become: yes
 
 - name: Alter index.html
-  shell: 'AWS_INSTANCEID=$(curl -s http://169.254.169.254/latest/meta-data/instance-id); sed -i.bak "s|Website Administrator|${AWS_INSTANCEID}|g" /usr/share/nginx/html/index.html'
+  shell: 'AWS_INSTANCEID=$(curl -s http://169.254.169.254/latest/meta-data/instance-id); sed -i.bak "s|Website Administrator|Instance ID: ${AWS_INSTANCEID}|g" /usr/share/nginx/html/index.html'
   become: yes
 
