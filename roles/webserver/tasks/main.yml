@@ -1,4 +1,10 @@
 ########## 
+- name: Wait for SSH to become open on the instances
+  wait_for:
+    port: 22
+    sleep: 10
+    delay: 10
+
 - name: Install nginx
   shell: "amazon-linux-extras install nginx1.12"
   become: yes
