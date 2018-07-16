@@ -32,13 +32,13 @@ fi
 VAULT_FILE=vault_key
 echo "${VAULT_PASS}" > "${VAULT_FILE}"
 
-printf "\n\nThe main playbook will now be executed, Please enter your Ansible Vault key when prompted.
+printf "\n\nThe main playbook will now be executed against the us-east-2 region, please enter your Ansible Vault key when prompted.
 
-Approximate running time is x minutes.\n\n"
+Provisioning time is ~8 minutes.\n\n"
 
 ansible-vault encrypt $AWS_FILE --vault-password-file "${VAULT_FILE}" 1>/dev/null
 
 rm -rf "${VAULT_FILE}"
 
-# ansible-playbook --ask-vault-pass ./site.yml
+ansible-playbook --ask-vault-pass ./site.yml
 
