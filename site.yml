@@ -3,11 +3,9 @@
 - hosts: localhost
 
   roles:
-    - aws-prereqs
-    - aws-core
+    - aws-infrastructure
 
 - hosts: webservers
-  gather_facts: no
 
   roles:
     - webserver

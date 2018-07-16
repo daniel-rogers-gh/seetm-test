@@ -1,22 +1,19 @@
 ########## 
-- name: Wait for SSH to become open on the instances
+- name:                      Wait for SSH to become open on the instances
   wait_for:
-    port: 22
-    sleep: 10
-    delay: 10
+    port:                    22
+    sleep:                   10
+    delay:                   10
 
-- name: Install nginx
-  shell: "amazon-linux-extras install nginx1.12"
-  become: yes
+- name:                      Install nginx
+  shell:                     "amazon-linux-extras install nginx1.12"
+  become:                    yes
 
-- name: Enable and start nginx
-  shell: "systemctl enable nginx && sudo systemctl start nginx"
-  become: yes
+- name:                      Enable and start nginx
+  shell:                     "systemctl enable nginx && sudo systemctl start nginx"
+  become:                    yes
 
-- name: Alter index.html
+- name:                      Alter index.html
   shell: 'AWS_INSTANCEID=$(curl -s http://169.254.169.254/latest/meta-data/instance-id); sed -i.bak "s|Website Administrator|Instance ID: ${AWS_INSTANCEID}|g" /usr/share/nginx/html/index.html'
-  become: yes
+  become:                    yes
 
-- name: Display Application Load Balancer URL
-  debug:
-    msg: "Browse to the following URL to verify results: {{ alb.dns_name }}"

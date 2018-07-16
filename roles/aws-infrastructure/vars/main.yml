@@ -1,0 +1,39 @@
+# VPC Information
+vpc_name:                    "my-test-vpc"
+vpc_cidr_block:              "10.0.0.0/16"
+
+# Subnets
+subnet_cidr_a:               "10.0.1.0/24"
+subnet_cidr_b:               "10.0.2.0/24"
+
+# Key Pairs
+key_pair_name:               "key_pair1"
+key_dest:                    "./aws-private.pem"
+
+# Security Groups
+elb_secgrp_name:             "load_balancer_security_group"
+vpc_secgrp_name:             "vpc_security_group"
+websvr_secgrp_name:          "webserver_security_group"
+
+# Launch Configuration
+lc_name:                     "lc_webserver"
+ami:                         "ami-8c122be9"
+instance_type:               "t2.micro"
+lc_dev_name:                 "/dev/xvda"
+lc_vol_size:                 "100"
+lc_vol_type:                 "gp2"
+
+# ALB Target Group (to be applied to webservers)
+elb_tg_name:                 "tgt-grp-webservers"
+elb_tg_check_path:           "/index.html"
+
+# Auto Scaling Group
+asg_name:                    "asg_1"
+avail_zones:                 [ "{{ aws_region }}a","{{ aws_region }}b" ]
+asg_min:                     "2"
+asg_max:                     "2"
+asg_desired:                 "2"
+
+# Application Load Balancer 
+elb_name:                    "app-lb1"
+

@@ -1,0 +1,130 @@
+# This file contains the shell output when executing this on my local system
+
+user@server:~/seetm-test$ ./make_rocket_go.sh
+
+####################################################################################
+#                         Thanks for making the rocket go!                         #
+#                Please don't run this in a production environment                 #
+####################################################################################
+Please provide the following details when prompted:
+
+    1) AWS Access Key (root account)
+    2) AWS Secret Key (root account)
+    3) User generated Ansible Vault encryption key
+
+The AWS passwords will be stored using Ansible Vault, encrypted with the provided password.
+
+Please paste AWS Access Key:
+Please paste AWS Secret Key:
+Please enter a strong passphrase for Vault encryption:
+
+The main playbook will now be executed against the us-east-2 region, please enter your Ansible Vault key when prompted.
+
+Approximate running time is x minutes.
+
+Vault password:
+
+PLAY [localhost] *****************************************************************************************************************
+
+TASK [Gathering Facts] ***********************************************************************************************************
+ok: [localhost]
+
+TASK [aws-prereqs : Create VPC] **************************************************************************************************
+changed: [localhost]
+
+TASK [aws-prereqs : Set VPC ID in variable] **************************************************************************************
+ok: [localhost]
+
+TASK [aws-prereqs : Create Subnet a] *********************************************************************************************
+changed: [localhost]
+
+TASK [aws-prereqs : Set Subnet ID in variable] ***********************************************************************************
+ok: [localhost]
+
+TASK [aws-prereqs : Create Subnet b] *********************************************************************************************
+changed: [localhost]
+
+TASK [aws-prereqs : Set Subnet ID in variable] ***********************************************************************************
+ok: [localhost]
+
+TASK [aws-prereqs : Create Internet Gateway for VPC] *****************************************************************************
+changed: [localhost]
+
+TASK [aws-prereqs : Set Internet Gateway ID in variable] *************************************************************************
+ok: [localhost]
+
+TASK [aws-prereqs : Set up public subnet route table] ****************************************************************************
+changed: [localhost]
+
+TASK [aws-prereqs : Set up public subnet route table] ****************************************************************************
+changed: [localhost]
+
+TASK [aws-prereqs : Create VPC Security Group] ***********************************************************************************
+changed: [localhost]
+
+TASK [aws-prereqs : Create new Key Pair] *****************************************************************************************
+changed: [localhost]
+
+TASK [aws-prereqs : Save private key] ********************************************************************************************
+changed: [localhost]
+
+TASK [aws-prereqs : Create Application Load Balancer Security Group] *************************************************************
+changed: [localhost]
+
+TASK [aws-prereqs : Set ALB Security Group ID in variable] ***********************************************************************
+ok: [localhost]
+
+TASK [aws-prereqs : Create webserver Security Group] *****************************************************************************
+changed: [localhost]
+
+TASK [aws-prereqs : Set webserver Security Group ID in variable] *****************************************************************
+ok: [localhost]
+
+TASK [aws-prereqs : Create Launch Configuration] *********************************************************************************
+changed: [localhost]
+
+TASK [aws-prereqs : Create Target Group] *****************************************************************************************
+changed: [localhost]
+
+TASK [aws-prereqs : Set ELB Target Group ARN in variable] ************************************************************************
+ok: [localhost]
+
+TASK [aws-core : Create Auto Scaling Group] **************************************************************************************
+changed: [localhost]
+
+TASK [aws-core : Create Application Load Balancer] *******************************************************************************
+changed: [localhost]
+
+TASK [aws-core : Get ASG instance facts] *****************************************************************************************
+ok: [localhost]
+
+TASK [aws-core : Add hosts to inventory] *****************************************************************************************
+changed: [localhost] => (item=ec2-18-191-135-132.us-east-2.compute.amazonaws.com)
+changed: [localhost] => (item=)
+changed: [localhost] => (item=ec2-18-222-24-15.us-east-2.compute.amazonaws.com)
+changed: [localhost] => (item=)
+
+PLAY [webservers] ****************************************************************************************************************
+
+TASK [webserver : Install nginx] *************************************************************************************************
+fatal: []: UNREACHABLE! => {"changed": false, "msg": "Failed to connect to the host via ssh: ssh: Could not resolve hostname : Temporary failure in name resolution\r\n", "unreachable": true}
+changed: [ec2-18-191-135-132.us-east-2.compute.amazonaws.com]
+changed: [ec2-18-222-24-15.us-east-2.compute.amazonaws.com]
+
+TASK [webserver : Enable and start nginx] ****************************************************************************************
+changed: [ec2-18-191-135-132.us-east-2.compute.amazonaws.com]
+changed: [ec2-18-222-24-15.us-east-2.compute.amazonaws.com]
+
+TASK [webserver : Alter index.html] **********************************************************************************************
+changed: [ec2-18-191-135-132.us-east-2.compute.amazonaws.com]
+changed: [ec2-18-222-24-15.us-east-2.compute.amazonaws.com]
+        to retry, use: --limit @/home/user/seetm-test/site.retry
+
+PLAY RECAP ***********************************************************************************************************************
+                           : ok=0    changed=0    unreachable=1    failed=0
+ec2-18-191-135-132.us-east-2.compute.amazonaws.com : ok=3    changed=3    unreachable=0    failed=0
+ec2-18-222-24-15.us-east-2.compute.amazonaws.com : ok=3    changed=3    unreachable=0    failed=0
+localhost                  : ok=25   changed=16   unreachable=0    failed=0
+
+user@server:~/seetm-test$
+

@@ -8,8 +8,8 @@ printf "
 "
 printf "Please provide the following details when prompted:
 
-    1) AWS Access Key (root account)
-    2) AWS Secret Key (root account)
+    1) AWS Access Key (root/full access account)
+    2) AWS Secret Key (root/full access account)
     3) User generated Ansible Vault encryption key
 
 The AWS passwords will be stored using Ansible Vault, encrypted with the provided password.\n\n"
@@ -41,5 +41,9 @@ ansible-vault encrypt $AWS_FILE --vault-password-file "${VAULT_FILE}" 1>/dev/nul
 
 rm -rf "${VAULT_FILE}"
 
-ansible-playbook --ask-vault-pass ./site.yml
+ansible-playbook --ask-vault-pass ./site.yml | tee ./output.log
+
+grep "Browse to the following URL to verify results" < ./output.log
+
+printf "\nScript has completed.\n"
 
