@@ -1,232 +1,232 @@
 ##########
-- name:               Create VPC
+- name:                      Create VPC
   ec2_vpc_net:
-    name:             "{{ vpc_name }}"
-    cidr_block:       "{{ vpc_cidr_block }}"
-    region:           "{{ aws_region }}"
-    aws_access_key:   "{{ aws_access_key }}"
-    aws_secret_key:   "{{ aws_secret_key }}"
-    state:            "present"
+    name:                    "{{ vpc_name }}"
+    cidr_block:              "{{ vpc_cidr_block }}"
+    region:                  "{{ aws_region }}"
+    aws_access_key:          "{{ aws_access_key }}"
+    aws_secret_key:          "{{ aws_secret_key }}"
+    state:                   "present"
   register: my_vpc
 
-- name:               Set VPC ID in variable
+- name:                      Set VPC ID in variable
   set_fact:
-    vpc_id:           "{{ my_vpc.vpc.id }}"
+    vpc_id:                  "{{ my_vpc.vpc.id }}"
 
 ##########
-- name:                 Create Subnet a
+- name:                      Create Subnet a
   ec2_vpc_subnet:
-    state:              "present"
-    vpc_id:             "{{ vpc_id }}"
-    cidr:               "{{ subnet_cidr_a }}"
-    az:                 "{{ aws_region }}a"
-    region:             "{{ aws_region }}"
-    aws_access_key:     "{{ aws_access_key }}"
-    aws_secret_key:     "{{ aws_secret_key }}"
+    state:                   "present"
+    vpc_id:                  "{{ vpc_id }}"
+    cidr:                    "{{ subnet_cidr_a }}"
+    az:                      "{{ aws_region }}a"
+    region:                  "{{ aws_region }}"
+    aws_access_key:          "{{ aws_access_key }}"
+    aws_secret_key:          "{{ aws_secret_key }}"
     resource_tags:
-      Name:             "Public Subnet a"
-    map_public:         true
+      Name:                  "Public Subnet a"
+    map_public:              true
   register: subnet_a
 
-- name:                 Set Subnet ID in variable
+- name:                      Set Subnet ID in variable
   set_fact:
-    subnet_a_id:        "{{ subnet_a.subnet.id }}"
+    subnet_a_id:             "{{ subnet_a.subnet.id }}"
 
 ##########
-- name:                 Create Subnet b
+- name:                      Create Subnet b
   ec2_vpc_subnet:
-    state:              "present"
-    vpc_id:             "{{ vpc_id }}"
-    cidr:               "{{ subnet_cidr_b }}"
-    az:                 "{{ aws_region }}b"
-    region:             "{{ aws_region }}"
-    aws_access_key:     "{{ aws_access_key }}"
-    aws_secret_key:     "{{ aws_secret_key }}"
+    state:                   "present"
+    vpc_id:                  "{{ vpc_id }}"
+    cidr:                    "{{ subnet_cidr_b }}"
+    az:                      "{{ aws_region }}b"
+    region:                  "{{ aws_region }}"
+    aws_access_key:          "{{ aws_access_key }}"
+    aws_secret_key:          "{{ aws_secret_key }}"
     resource_tags:
-      Name:             "Public Subnet b"
-    map_public:         true
+      Name:                  "Public Subnet b"
+    map_public:              true
   register: subnet_b
 
-- name:                 Set Subnet ID in variable
+- name:                      Set Subnet ID in variable
   set_fact:
-    subnet_b_id:        "{{ subnet_b.subnet.id }}"
+    subnet_b_id:             "{{ subnet_b.subnet.id }}"
 
 ##########
-- name:                 Create Internet Gateway for VPC
+- name:                      Create Internet Gateway for VPC
   ec2_vpc_igw:
-    vpc_id:             "{{ vpc_id }}"
-    region:             "{{ aws_region }}"
-    aws_access_key:     "{{ aws_access_key }}"
-    aws_secret_key:     "{{ aws_secret_key }}"
-    state:              "present"
-  register: my_vpc_igw  
+    vpc_id:                  "{{ vpc_id }}"
+    region:                  "{{ aws_region }}"
+    aws_access_key:          "{{ aws_access_key }}"
+    aws_secret_key:          "{{ aws_secret_key }}"
+    state:                   "present"
+  register: my_vpc_igw       
 
-- name:                 Set Internet Gateway ID in variable
+- name:                      Set Internet Gateway ID in variable
   set_fact:
-    igw_id:             "{{ my_vpc_igw.gateway_id }}"
+    igw_id:                  "{{ my_vpc_igw.gateway_id }}"
 
 ##########
-- name:                 Set up public subnet route table
-  ec2_vpc_route_table:  
-    vpc_id:             "{{ vpc_id }}"
-    region:             "{{ aws_region }}"
-    aws_access_key:     "{{ aws_access_key }}"
-    aws_secret_key:     "{{ aws_secret_key }}"
+- name:                      Set up public subnet route table
+  ec2_vpc_route_table:       
+    vpc_id:                  "{{ vpc_id }}"
+    region:                  "{{ aws_region }}"
+    aws_access_key:          "{{ aws_access_key }}"
+    aws_secret_key:          "{{ aws_secret_key }}"
     tags:
-      Name:             "Public a"
+      Name:                  "Public a"
     subnets:
-      -                 "{{ subnet_a_id }}"
+      -                      "{{ subnet_a_id }}"
     routes:
-      - dest:           "0.0.0.0/0"
-        gateway_id:     "{{ igw_id }}"
-    state:               "present"
+      - dest:                "0.0.0.0/0"
+        gateway_id:          "{{ igw_id }}"
+    state:                    "present"
 
 ##########
-- name:                 Set up public subnet route table
+- name:                      Set up public subnet route table
   ec2_vpc_route_table:
-    vpc_id:             "{{ vpc_id }}"
-    region:             "{{ aws_region }}"
-    aws_access_key:     "{{ aws_access_key }}"
-    aws_secret_key:     "{{ aws_secret_key }}"
+    vpc_id:                  "{{ vpc_id }}"
+    region:                  "{{ aws_region }}"
+    aws_access_key:          "{{ aws_access_key }}"
+    aws_secret_key:          "{{ aws_secret_key }}"
     tags:
-      Name:             "Public b"
+      Name:                  "Public b"
     subnets:
-      -                 "{{ subnet_b_id }}"
+      -                      "{{ subnet_b_id }}"
     routes:
-      - dest:           "0.0.0.0/0"
-        gateway_id:     "{{ igw_id }}"
-    state:              "present"
+      - dest:                "0.0.0.0/0"
+        gateway_id:          "{{ igw_id }}"
+    state:                   "present"
 
 ##########
-- name:                 Create VPC Security Group
+- name:                      Create VPC Security Group
   ec2_group:
-    name:               "{{ vpc_secgrp_name }}"
-    description:        "{{ vpc_secgrp_name }}"
-    vpc_id:             "{{ vpc_id }}"
-    region:             "{{ aws_region }}"
-    aws_access_key:     "{{ aws_access_key }}"
-    aws_secret_key:     "{{ aws_secret_key }}"
+    name:                    "{{ vpc_secgrp_name }}"
+    description:             "{{ vpc_secgrp_name }}"
+    vpc_id:                  "{{ vpc_id }}"
+    region:                  "{{ aws_region }}"
+    aws_access_key:          "{{ aws_access_key }}"
+    aws_secret_key:          "{{ aws_secret_key }}"
     rules:
-      - proto:          "tcp"
-        from_port:      "22"
-        to_port:        "22"
-        cidr_ip:        "0.0.0.0/0"
-      - proto:          "tcp"
-        from_port:      "80"
-        to_port:        "80"
-        cidr_ip:        "0.0.0.0/0"
-    state:              "present"
+      - proto:               "tcp"
+        from_port:           "22"
+        to_port:             "22"
+        cidr_ip:             "0.0.0.0/0"
+      - proto:               "tcp"
+        from_port:           "80"
+        to_port:             "80"
+        cidr_ip:             "0.0.0.0/0"
+    state:                   "present"
 
 ##########
-- name:                 Create new Key Pair
+- name:                      Create new Key Pair
   ec2_key:
-    name:               "{{ key_pair_name }}"
-    region:             "{{ aws_region }}"
-    aws_access_key:     "{{ aws_access_key }}"
-    aws_secret_key:     "{{ aws_secret_key }}"
+    name:                    "{{ key_pair_name }}"
+    region:                  "{{ aws_region }}"
+    aws_access_key:          "{{ aws_access_key }}"
+    aws_secret_key:          "{{ aws_secret_key }}"
   register: ec2_key
 
-- name:                 Save private key
+- name:                      Save private key
   copy:
-    content:            "{{ ec2_key.key.private_key }}"
-    dest:               "{{ key_dest }}"
-    mode:               0600
-  when:                 ec2_key.changed
+    content:                 "{{ ec2_key.key.private_key }}"
+    dest:                    "{{ key_dest }}"
+    mode:                    0600
+  when:                      ec2_key.changed
 
 ##########
-- name:                 Create Application Load Balancer Security Group
+- name:                      Create Application Load Balancer Security Group
   ec2_group:
-    name:               "{{ elb_secgrp_name }}"
-    description:        "{{ elb_secgrp_name }}"
-    vpc_id:             "{{ vpc_id }}"
-    region:             "{{ aws_region }}"
-    aws_access_key:     "{{ aws_access_key }}"
-    aws_secret_key:     "{{ aws_secret_key }}"
+    name:                    "{{ elb_secgrp_name }}"
+    description:             "{{ elb_secgrp_name }}"
+    vpc_id:                  "{{ vpc_id }}"
+    region:                  "{{ aws_region }}"
+    aws_access_key:          "{{ aws_access_key }}"
+    aws_secret_key:          "{{ aws_secret_key }}"
     rules:
-      - proto:          "tcp"
-        from_port:      "80"
-        to_port:        "80"
-        cidr_ip:        "0.0.0.0/0"
-      - proto:          "tcp"
-        from_port:      "443"
-        to_port:        "443"
-        cidr_ip:        "0.0.0.0/0"
+      - proto:               "tcp"
+        from_port:           "80"
+        to_port:             "80"
+        cidr_ip:             "0.0.0.0/0"
+      - proto:               "tcp"
+        from_port:           "443"
+        to_port:             "443"
+        cidr_ip:             "0.0.0.0/0"
     rules_egress:
-      - proto:          "all"
-        cidr_ip:        "0.0.0.0/0"
-    state:              "present"
+      - proto:               "all"
+        cidr_ip:             "0.0.0.0/0"
+    state:                   "present"
   register: elb_secgrp
 
-- name:                 Set ALB Security Group ID in variable
+- name:                      Set ALB Security Group ID in variable
   set_fact:
-    elb_secgrp_id:      "{{ elb_secgrp.group_id }}"
+    elb_secgrp_id:           "{{ elb_secgrp.group_id }}"
 
 ##########
-- name:                 Create webserver Security Group
+- name:                      Create webserver Security Group
   ec2_group:
-    name:               "{{ websvr_secgrp_name }}"
-    description:        "{{ websvr_secgrp_name }}"
-    vpc_id:             "{{ vpc_id }}"
-    region:             "{{ aws_region }}"
-    aws_access_key:     "{{ aws_access_key }}"
-    aws_secret_key:     "{{ aws_secret_key }}"
+    name:                    "{{ websvr_secgrp_name }}"
+    description:             "{{ websvr_secgrp_name }}"
+    vpc_id:                  "{{ vpc_id }}"
+    region:                  "{{ aws_region }}"
+    aws_access_key:          "{{ aws_access_key }}"
+    aws_secret_key:          "{{ aws_secret_key }}"
     rules:
-      - proto:          "tcp"
-        from_port:      "22"
-        to_port:        "22"
-        cidr_ip:        "0.0.0.0/0"
-      - proto:          "tcp"
-        from_port:      "80"
-        to_port:        "80"
-        cidr_ip:        "0.0.0.0/0"
-      - proto:          "tcp"
-        from_port:      "443"
-        to_port:        "443"
-        cidr_ip:        "0.0.0.0/0"
+      - proto:               "tcp"
+        from_port:           "22"
+        to_port:             "22"
+        cidr_ip:             "0.0.0.0/0"
+      - proto:               "tcp"
+        from_port:           "80"
+        to_port:             "80"
+        cidr_ip:             "0.0.0.0/0"
+      - proto:               "tcp"
+        from_port:           "443"
+        to_port:             "443"
+        cidr_ip:             "0.0.0.0/0"
     rules_egress:
-      - proto:          "all"
-        cidr_ip:        "0.0.0.0/0"
-    state:              "present"
+      - proto:               "all"
+        cidr_ip:             "0.0.0.0/0"
+    state:                   "present"
   register: websvr_secgrp
 
-- name:                 Set webserver Security Group ID in variable
+- name:                      Set webserver Security Group ID in variable
   set_fact:
-    websvr_secgrp_id:   "{{ websvr_secgrp.group_id }}"
+    websvr_secgrp_id:        "{{ websvr_secgrp.group_id }}"
 
 ##########
-- name:                 Create Launch Configuration
+- name:                      Create Launch Configuration
   ec2_lc:
-    name:               "{{ lc_name }}" 
-    vpc_id:             "{{ vpc_id }}"
-    image_id:           "{{ ami }}" 
-    key_name:           "{{ key_pair_name }}"
-    security_groups:    "{{ websvr_secgrp_id }}"
-    instance_type:      "{{ instance_type }}"
-    region:             "{{ aws_region }}"
-    aws_access_key:     "{{ aws_access_key }}"
-    aws_secret_key:     "{{ aws_secret_key }}"
+    name:                    "{{ lc_name }}" 
+    vpc_id:                  "{{ vpc_id }}"
+    image_id:                "{{ ami }}" 
+    key_name:                "{{ key_pair_name }}"
+    security_groups:         "{{ websvr_secgrp_id }}"
+    instance_type:           "{{ instance_type }}"
+    region:                  "{{ aws_region }}"
+    aws_access_key:          "{{ aws_access_key }}"
+    aws_secret_key:          "{{ aws_secret_key }}"
     volumes:
-    - device_name:      "{{ lc_dev_name }}"
-      volume_size:      "{{ lc_vol_size }}"
-      volume_type:      "{{ lc_vol_type }}"
+    - device_name:           "{{ lc_dev_name }}"
+      volume_size:           "{{ lc_vol_size }}"
+      volume_type:           "{{ lc_vol_type }}"
       delete_on_termination: true
-    state:              "present"
+    state:                   "present"
 
 ##########
-- name:                 Create Target Group
+- name:                      Create Target Group
   elb_target_group:
-    aws_access_key:     "{{ aws_access_key }}"
-    aws_secret_key:     "{{ aws_secret_key }}"
-    region:             "{{ aws_region }}"
-    name:               "{{ elb_tg_name }}"
-    protocol:           "http"
-    port:               "80"
-    vpc_id:             "{{ vpc_id }}"
-    health_check_path:  "{{ elb_tg_check_path }}" 
-    state:              "present"
+    aws_access_key:          "{{ aws_access_key }}"
+    aws_secret_key:          "{{ aws_secret_key }}"
+    region:                  "{{ aws_region }}"
+    name:                    "{{ elb_tg_name }}"
+    protocol:                "http"
+    port:                    "80"
+    vpc_id:                  "{{ vpc_id }}"
+    health_check_path:       "{{ elb_tg_check_path }}" 
+    state:                   "present"
   register: elb_tg
 
-- name:                 Set ELB Target Group ARN in variable
+- name:                      Set ELB Target Group ARN in variable
   set_fact:
-    elb_tg_arn:         "{{ elb_tg.target_group_arn }}"
+    elb_tg_arn:              "{{ elb_tg.target_group_arn }}"
 
