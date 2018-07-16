@@ -1,10 +1,6 @@
-# seetm-test
-
-Thanks for stopping by! If you're interested in what this project does, please keep on reading. Feel free to email me with any queries or suggestions I am always striving to learn and share.
-
 ## What does seetm-test do?
 
-This project will create a pair of load balanced webservers with supporting AWS infrastructure.
+[This project](https://github.com/daniel-rogers-gh/seetm-test) will create a pair of load balanced webservers with supporting AWS infrastructure.
 
 #### AWS components (high level)
 
@@ -47,7 +43,7 @@ This project will create a pair of load balanced webservers with supporting AWS 
 
 ## Usage
 
-### Warning
+### Disclaimer
 
 Do not run this in a production environment! I am not responsible for any damage or costs incurred by running this code. Charges may be made to an AWS account (even a trial) if the limits have been exceeded.
 
@@ -55,9 +51,11 @@ Do not run this in a production environment! I am not responsible for any damage
 
 Once all pre-requisites have been fulfilled and the warning above has been read, perform the following:
 
-- `git clone https://github.com/daniel-rogers-gh/seetm-test.git` 
-- `cd ./seetm-test`
-- `make_rocket_go.sh`
+```
+git clone https://github.com/daniel-rogers-gh/seetm-test.git` 
+cd ./seetm-test`
+./make_rocket_go.sh`
+```
 
 or for the one liner concatenate the commands like so:
 
@@ -73,7 +71,7 @@ Once these values have been supplied the credentials will be encrypted and the m
 
 The key pair for the instances will be downloaded to `seetm-test/aws-private.pem`
 
-Approximate running time is xx minutes. 
+Approximate provisioning time is 8 minutes. 
 
 #### Workstation configuration
 
@@ -103,11 +101,14 @@ To date this has only been executed on Ubuntu Linux. It should work on OSX but I
   - It is currently generated in a previous role which allows them to be targeted
   - Marked as a high priority improvement
 - Limited testing across varied environments - issues will undoubtedly be present somewhere
+- The first webserver play may give an error "Failed to connect to the host via ssh"
+  - It should still complete successfully
+  - Race condition issue most likely related to DNS propogation, needs a small wait step
 
 ## Outstanding tasks for submission
 
-- [ ] Gather ansible log output and approximate running time
-- [ ] Finish launcher `make_rocket_go.sh`
+- [x] Gather ansible log output and approximate running time
+- [x] Finish launcher `make_rocket_go.sh`
 - [ ] Test launcher in newly registered AWS trial account
 - [ ] Output load balancer public DNS upon script completion
 - [x] Spell check README.md
