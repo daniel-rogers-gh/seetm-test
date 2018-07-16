@@ -38,10 +38,11 @@
             TargetGroupName: "{{ elb_tg_name }}"
     state:                   "present"
     wait:                    "yes"
-  register: alb
+  register: alb_results
 
 - name:                      Set Load Balancer public DNS in variable
-  set_fact:                  "{{ alb.dns_name }}"
+  set_fact:
+    alb:                     "{{ alb.dns_name }}"
 
 ##########
 - name:                      Get ASG instance facts
