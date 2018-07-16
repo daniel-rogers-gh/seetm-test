@@ -29,13 +29,21 @@ This project will create a pair of load balanced webservers with supporting AWS 
 
 **Package        : version used in development**
 - python2.7      : 2.7.12
+  - https://www.makeuseof.com/tag/install-pip-for-python/
 - python3        : 3.5.2
+  - https://realpython.com/installing-python/
 - python-pip     : 10.0.1
+  - https://www.makeuseof.com/tag/install-pip-for-python/
 - python3-pip    : 8.1.1
+  - https://www.makeuseof.com/tag/install-pip-for-python/
 - boto           : 2.49.0
+  - https://github.com/boto/boto
 - boto3          : 1.7.56
+  - https://github.com/boto/boto3
 - ansible        : 2.6.1
+  - https://docs.ansible.com/ansible/latest/installation_guide/intro_installation.html
 - git            : 2.7.4
+  - https://git-scm.com/book/en/v2/Getting-Started-Installing-Git
 
 ## Usage
 
@@ -50,6 +58,10 @@ Once all pre-requisites have been fulfilled and the warning above has been read,
 - `git clone https://github.com/daniel-rogers-gh/seetm-test.git` 
 - `cd ./seetm-test`
 - `make_rocket_go.sh`
+
+or for the one liner concatenate the commands like so:
+
+`git clone https://github.com/daniel-rogers-gh/seetm-test.git && cd ./seetm-test && ./make_rocket_go.sh`
 
 The script will ask for:
 
@@ -100,6 +112,7 @@ To date this has only been executed on Ubuntu Linux. It should work on OSX but I
 - [ ] Output load balancer public DNS upon script completion
 - [x] Spell check README.md
 - [x] Complete 1st draft README.md
+- [ ] Merge aws-prereqs and aws-core roles into single playbook
 
 ## References
 
@@ -114,6 +127,7 @@ Ansible + VPC blog
 
 Ansible Vault
 - https://docs.ansible.com/ansible/2.5/user_guide/vault.html
+- https://gadelkareem.com/2018/04/10/ansible-vault-encrypt-decrypt-shell-script/
 
 Git README markdown
 - https://help.github.com/articles/basic-writing-and-formatting-syntax
@@ -127,4 +141,7 @@ AWS Regions & Availability Zones
 
 Sample Ansible repository layout
 - https://github.com/enginyoyen/ansible-best-practises
+
+AWS documentation
+- https://aws.amazon.com/documentation/
 

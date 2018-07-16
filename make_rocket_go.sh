@@ -1,39 +1,44 @@
 #!/bin/bash
 
-echo "
+printf "
 ####################################################################################
-# Thanks for making the rocket go!!                                                #
+#                         Thanks for making the rocket go!                         #
+#                Please don't run this in a production environment                 #
 ####################################################################################
 "
-echo "In order to make rocket go please provide the following details when prompted:
+printf "Please provide the following details when prompted:
 
     1) AWS Access Key (root account)
     2) AWS Secret Key (root account)
     3) User generated Ansible Vault encryption key
 
-The AWS passwords will be stored using Ansible Vault, encrypted with the provided password.
-"
-echo
-read -sp 'Please paste AWS Access Key: ' aws_access
-echo
-read -sp 'Please paste AWS Secret Key: ' aws_secret
-echo
-read -sp 'Please enter a strong passphrase for Vault encryption: ' vault_key
-echo
-echo "The following actions will occur:
+The AWS passwords will be stored using Ansible Vault, encrypted with the provided password.\n\n"
 
-    1) Git clone of daniel-rogers-gh/seetm-test.git
-    2) Playbook site.yml will be executed
-      2a) Please enter your Ansible Vault key when prompted
+AWS_FILE=./group_vars/all/vault
+if [ -z "$AWS_ACCESS" ]; then
+    read -sp 'Please paste AWS Access Key: ' AWS_ACCESS
+fi
+echo "vault_aws_access_key: ${AWS_ACCESS}" > "${AWS_FILE}"
 
-Hopefully it will work, approximate running time is x min
+if [ -z "$AWS_SECRET" ]; then
+    read -sp $'\nPlease paste AWS Secret Key: ' AWS_SECRET
+fi
+echo "vault_aws_secret_key: ${AWS_SECRET}" >> "${AWS_FILE}"
 
-For your convenience the URL of the load balancer will be displayed upon completion
+if [ -z "$VAULT_PASS" ]; then
+    read -sp $'\nPlease enter a strong passphrase for Vault encryption: ' VAULT_PASS
+fi
 
-Please don't run this in a production environment
+VAULT_FILE=vault_key
+echo "${VAULT_PASS}" > "${VAULT_FILE}"
 
-echo $aws_access
-echo $aws_secret
-echo $vault_key
-echo
-# ansible-playbook --ask-vault-pass ./test_playbooks/test-aws_creds_b.yml          #
+printf "\n\nThe main playbook will now be executed, Please enter your Ansible Vault key when prompted.
+
+Approximate running time is x minutes.\n\n"
+
+ansible-vault encrypt $AWS_FILE --vault-password-file "${VAULT_FILE}" 1>/dev/null
+
+rm -rf "${VAULT_FILE}"
+
+# ansible-playbook --ask-vault-pass ./site.yml
+
