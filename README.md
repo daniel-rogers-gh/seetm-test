@@ -73,6 +73,8 @@ The key pair for the instances will be downloaded to `seetm-test/aws-private.pem
 
 Approximate provisioning time is 8 minutes. 
 
+**Please note this script is not currently idempotent. If an error is encountered (missing package etc) please delete any provisioned resources before re-running the script**
+
 #### Workstation configuration
 
 To date this has only been executed on Ubuntu Linux. It should work on OSX but I am unable to verify this.
@@ -90,7 +92,7 @@ To date this has only been executed on Ubuntu Linux. It should work on OSX but I
   - Further research needed
 - Role mapping to remove requirement for root keys
 
-## Current limitations
+## Known issues / current limitations
 
 - Limited to region **us-east-2**
   - The ami id is different in each region for Amazon Linux 2 t2.micro instance and I have not implemented a dynamic picker yet
@@ -102,18 +104,19 @@ To date this has only been executed on Ubuntu Linux. It should work on OSX but I
   - Marked as a high priority improvement
 - Limited testing across varied environments - issues will undoubtedly be present somewhere
 - The first webserver play may give an error "Failed to connect to the host via ssh"
-  - It should still complete successfully
-  - Race condition issue most likely related to DNS propogation, needs a small wait step
+  - It **should** still complete successfully
+  - I thought this was a race condition issue but even after a wait step it had the same result
+  - [This thread](https://github.com/ansible/ansible/issues/15321) indicates it is most likely an issue with my variable setup
 
 ## Outstanding tasks for submission
 
 - [x] Gather ansible log output and approximate running time
 - [x] Finish launcher `make_rocket_go.sh`
-- [ ] Test launcher in newly registered AWS trial account
-- [ ] Output load balancer public DNS upon script completion
+- [x] Test launcher in newly registered AWS trial account
+- [x] Output load balancer public DNS upon script completion
 - [x] Spell check README.md
 - [x] Complete 1st draft README.md
-- [ ] Merge aws-prereqs and aws-core roles into single playbook
+- [x] Merge aws-prereqs and aws-core roles into single playbook
 
 ## References
 

@@ -6,6 +6,7 @@
     - aws-infrastructure
 
 - hosts: webservers
+  gather_facts: no
 
   roles:
     - webserver

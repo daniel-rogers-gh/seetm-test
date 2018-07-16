@@ -1,6 +1,3 @@
-*.retry
-*.pem
-vault
 ansible-playbook 2.6.1
   config file = /home/danielr/seetm-test/ansible.cfg
   configured module search path = [u'/home/danielr/.ansible/plugins/modules', u'/usr/share/ansible/plugins/modules']

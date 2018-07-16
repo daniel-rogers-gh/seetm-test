@@ -1,116 +1,115 @@
 
-PLAY [localhost] **********************************************************************************************
+PLAY [localhost] *****************************************************************************************************************
 
-TASK [Gathering Facts] ****************************************************************************************
+TASK [Gathering Facts] ***********************************************************************************************************
 ok: [localhost]
 
-TASK [aws-infrastructure : Create VPC] ************************************************************************
+TASK [aws-infrastructure : Create VPC] *******************************************************************************************
 changed: [localhost]
 
-TASK [aws-infrastructure : Set VPC ID in variable] ************************************************************
+TASK [aws-infrastructure : Set VPC ID in variable] *******************************************************************************
 ok: [localhost]
 
-TASK [aws-infrastructure : Create Subnet a] *******************************************************************
+TASK [aws-infrastructure : Create Subnet a] **************************************************************************************
 changed: [localhost]
 
-TASK [aws-infrastructure : Set Subnet ID in variable] *********************************************************
+TASK [aws-infrastructure : Set Subnet ID in variable] ****************************************************************************
 ok: [localhost]
 
-TASK [aws-infrastructure : Create Subnet b] *******************************************************************
+TASK [aws-infrastructure : Create Subnet b] **************************************************************************************
 changed: [localhost]
 
-TASK [aws-infrastructure : Set Subnet ID in variable] *********************************************************
+TASK [aws-infrastructure : Set Subnet ID in variable] ****************************************************************************
 ok: [localhost]
 
-TASK [aws-infrastructure : Create Internet Gateway for VPC] ***************************************************
+TASK [aws-infrastructure : Create Internet Gateway for VPC] **********************************************************************
 changed: [localhost]
 
-TASK [aws-infrastructure : Set Internet Gateway ID in variable] ***********************************************
+TASK [aws-infrastructure : Set Internet Gateway ID in variable] ******************************************************************
 ok: [localhost]
 
-TASK [aws-infrastructure : Set up public subnet route table] **************************************************
+TASK [aws-infrastructure : Set up public subnet route table] *********************************************************************
 changed: [localhost]
 
-TASK [aws-infrastructure : Set up public subnet route table] **************************************************
+TASK [aws-infrastructure : Set up public subnet route table] *********************************************************************
 changed: [localhost]
 
-TASK [aws-infrastructure : Create VPC Security Group] *********************************************************
+TASK [aws-infrastructure : Create VPC Security Group] ****************************************************************************
 changed: [localhost]
 
-TASK [aws-infrastructure : Create new Key Pair] ***************************************************************
+TASK [aws-infrastructure : Create new Key Pair] **********************************************************************************
 changed: [localhost]
 
-TASK [aws-infrastructure : Save private key] ******************************************************************
+TASK [aws-infrastructure : Save private key] *************************************************************************************
 changed: [localhost]
 
-TASK [aws-infrastructure : Create Application Load Balancer Security Group] ***********************************
+TASK [aws-infrastructure : Create Application Load Balancer Security Group] ******************************************************
 changed: [localhost]
 
-TASK [aws-infrastructure : Set ALB Security Group ID in variable] *********************************************
+TASK [aws-infrastructure : Set ALB Security Group ID in variable] ****************************************************************
 ok: [localhost]
 
-TASK [aws-infrastructure : Create webserver Security Group] ***************************************************
+TASK [aws-infrastructure : Create webserver Security Group] **********************************************************************
 changed: [localhost]
 
-TASK [aws-infrastructure : Set webserver Security Group ID in variable] ***************************************
+TASK [aws-infrastructure : Set webserver Security Group ID in variable] **********************************************************
 ok: [localhost]
 
-TASK [aws-infrastructure : Create Launch Configuration] *******************************************************
+TASK [aws-infrastructure : Create Launch Configuration] **************************************************************************
 changed: [localhost]
 
-TASK [aws-infrastructure : Create Target Group] ***************************************************************
+TASK [aws-infrastructure : Create Target Group] **********************************************************************************
 changed: [localhost]
 
-TASK [aws-infrastructure : Create Auto Scaling Group] *********************************************************
+TASK [aws-infrastructure : Create Auto Scaling Group] ****************************************************************************
 changed: [localhost]
 
-TASK [aws-infrastructure : Create Application Load Balancer] **************************************************
+TASK [aws-infrastructure : Create Application Load Balancer] *********************************************************************
 changed: [localhost]
 
-TASK [aws-infrastructure : Set Load Balancer public DNS in variable] ******************************************
+TASK [aws-infrastructure : Set Load Balancer public DNS in variable] *************************************************************
 ok: [localhost]
 
-TASK [aws-infrastructure : Get ASG instance facts] ************************************************************
+TASK [aws-infrastructure : Get ASG instance facts] *******************************************************************************
 ok: [localhost]
 
-TASK [aws-infrastructure : Add hosts to inventory] ************************************************************
+TASK [aws-infrastructure : Add hosts to inventory] *******************************************************************************
 changed: [localhost] => (item=)
 changed: [localhost] => (item=)
-changed: [localhost] => (item=ec2-13-58-109-65.us-east-2.compute.amazonaws.com)
-changed: [localhost] => (item=ec2-18-218-106-226.us-east-2.compute.amazonaws.com)
+changed: [localhost] => (item=ec2-13-59-85-189.us-east-2.compute.amazonaws.com)
+changed: [localhost] => (item=ec2-18-219-96-174.us-east-2.compute.amazonaws.com)
 
-TASK [aws-infrastructure : Display Application Load Balancer URL] *********************************************
+TASK [aws-infrastructure : Display Application Load Balancer URL] ****************************************************************
 ok: [localhost] => {
-    "msg": "Browse to the following URL to verify results: app-lb1-372171935.us-east-2.elb.amazonaws.com"
+    "msg": "Browse to the following URL to verify results: app-lb1-126483605.us-east-2.elb.amazonaws.com"
 }
 
-PLAY [webservers] *********************************************************************************************
+TASK [aws-infrastructure : Sleep for 30 seconds and continue with play] **********************************************************
+ok: [localhost -> localhost]
 
-TASK [Gathering Facts] ****************************************************************************************
+PLAY [webservers] ****************************************************************************************************************
+
+TASK [webserver : Wait for SSH to become open on the instances] ******************************************************************
 fatal: []: UNREACHABLE! => {"changed": false, "msg": "Failed to connect to the host via ssh: ssh: Could not resolve hostname : Temporary failure in name resolution\r\n", "unreachable": true}
-ok: [ec2-18-218-106-226.us-east-2.compute.amazonaws.com]
-ok: [ec2-13-58-109-65.us-east-2.compute.amazonaws.com]
+ok: [ec2-18-219-96-174.us-east-2.compute.amazonaws.com]
+ok: [ec2-13-59-85-189.us-east-2.compute.amazonaws.com]
 
-TASK [webserver : Wait for SSH to become open on the instances] ***********************************************
-ok: [ec2-13-58-109-65.us-east-2.compute.amazonaws.com]
-ok: [ec2-18-218-106-226.us-east-2.compute.amazonaws.com]
+TASK [webserver : Install nginx] *************************************************************************************************
+changed: [ec2-13-59-85-189.us-east-2.compute.amazonaws.com]
+changed: [ec2-18-219-96-174.us-east-2.compute.amazonaws.com]
 
-TASK [webserver : Install nginx] ******************************************************************************
-changed: [ec2-13-58-109-65.us-east-2.compute.amazonaws.com]
-changed: [ec2-18-218-106-226.us-east-2.compute.amazonaws.com]
+TASK [webserver : Enable and start nginx] ****************************************************************************************
+changed: [ec2-13-59-85-189.us-east-2.compute.amazonaws.com]
+changed: [ec2-18-219-96-174.us-east-2.compute.amazonaws.com]
 
-TASK [webserver : Enable and start nginx] *********************************************************************
-changed: [ec2-13-58-109-65.us-east-2.compute.amazonaws.com]
-changed: [ec2-18-218-106-226.us-east-2.compute.amazonaws.com]
-
-TASK [webserver : Alter index.html] ***************************************************************************
-changed: [ec2-13-58-109-65.us-east-2.compute.amazonaws.com]
-changed: [ec2-18-218-106-226.us-east-2.compute.amazonaws.com]
+TASK [webserver : Alter index.html] **********************************************************************************************
+changed: [ec2-13-59-85-189.us-east-2.compute.amazonaws.com]
+changed: [ec2-18-219-96-174.us-east-2.compute.amazonaws.com]
 	to retry, use: --limit @/home/danielr/seetm-test/site.retry
 
-PLAY RECAP ****************************************************************************************************
+PLAY RECAP ***********************************************************************************************************************
                            : ok=0    changed=0    unreachable=1    failed=0   
-ec2-13-58-109-65.us-east-2.compute.amazonaws.com : ok=5    changed=3    unreachable=0    failed=0   
-ec2-18-218-106-226.us-east-2.compute.amazonaws.com : ok=5    changed=3    unreachable=0    failed=0   
-localhost                  : ok=26   changed=16   unreachable=0    failed=0   
+ec2-13-59-85-189.us-east-2.compute.amazonaws.com : ok=4    changed=3    unreachable=0    failed=0   
+ec2-18-219-96-174.us-east-2.compute.amazonaws.com : ok=4    changed=3    unreachable=0    failed=0   
+localhost                  : ok=27   changed=16   unreachable=0    failed=0   
 
